@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "test:server": "node test/server.mjs",
+    "test:e2e:firefox": "mocha",
+    "download:firefox": "node lib/download-firefox-cli.mjs",
+    "postinstall": "node lib/ensure-geckodriver.mjs"
+  },
+  "dependencies": {
+    "argv": "^0.0.3",
+    "express": "^4.18.2",
+    "geckodriver": "^4.0.0",
+    "mocha": "^10.8.0",
+    "node-fetch": "^3.3.2",
+    "path": "^0.12.7",
+    "selenium-webdriver": "^4.27.0",
+    "tar": "^7.4.3"
+  }
+}

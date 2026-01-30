@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <h1>Test</h1>
+    <pre id="output"></pre>
+    <script type="module">
+        new PerformanceObserver((entryList) => {
+        for (const entry of entryList.getEntriesByName('first-contentful-paint')) {
+            console.log('FCP candidate:', entry.startTime, entry);
+            document.querySelector('#output').innerText = JSON.stringify(entry, null, 2);;
+        }
+        }).observe({type: 'paint', buffered: true});
+    </script>
+</body>
+</html>
