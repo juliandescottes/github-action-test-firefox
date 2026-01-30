@@ -1,0 +1,59 @@
+name: Run tests
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  firefox-tests:
+    name: Run Firefox e2e tests
+    # Runs on macos-15 and linux (ubuntu-latest)
+    runs-on: macos-15
+    env:
+      MOZ_PROFILER_STARTUP_FILTERS: "*"
+      MOZ_PROFILER_STARTUP: "1"
+      MOZ_PROFILER_SHUTDOWN: "/tmp/profiler.json"
+      MOZ_LOG: "timestamp,sync,GMP:5,EME:5,ContentSignatureVerifier:5"
+      GECKODRIVER_AUTO_INSTALL: "1"
+      # Optional: Uncomment to test with a custom Firefox build from CI
+      FIREFOX_DOWNLOAD_URL: "https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/HwBbl4aeSQSgasgu0ipHRQ/runs/0/artifacts/public/build/target.dmg"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: NPM install
+        run: npm install
+
+      - name: Download custom Firefox binary (if URL provided)
+        if: env.FIREFOX_DOWNLOAD_URL != ''
+        run: npm run download:firefox -- ${{ env.FIREFOX_DOWNLOAD_URL }} --output-env
+
+      - name: Run server
+        run: npm run test:server &
+
+      - name: Run e2e tests for Firefox
+        run: npm run test:e2e:firefox
+        continue-on-error: true
+
+      - name: Collect macOS logs
+        if: runner.os == 'macOS'
+        run: log show --last 5m > /tmp/log_show.txt
+
+      - name: Upload profile artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: profile.json
+          path: /tmp/profiler.json
+
+      - name: Upload log artifact
+        if: always() && runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: log_show.txt
+          path: /tmp/log_show.txt
+
+      - name: Echo profile location
+        if: always()
+        run: echo "Profiler should be available at the bottom of this page https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/"
