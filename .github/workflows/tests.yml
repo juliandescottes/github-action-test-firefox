@@ -17,7 +17,7 @@ jobs:
       MOZ_LOG: "timestamp,sync,GMP:5,EME:5,ContentSignatureVerifier:5"
       GECKODRIVER_AUTO_INSTALL: "1"
       # Optional: Uncomment to test with a custom Firefox build from CI
-      FIREFOX_DOWNLOAD_URL: "https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/HwBbl4aeSQSgasgu0ipHRQ/runs/0/artifacts/public/build/target.dmg"
+      FIREFOX_DOWNLOAD_URL: "https://ftp.mozilla.org/pub/firefox/releases/148.0b11/mac/en-US/Firefox%20148.0b11.dmg"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
