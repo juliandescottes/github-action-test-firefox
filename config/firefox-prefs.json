@@ -1,7 +1,7 @@
 {
-  "dom.webgpu.enabled": false,
   "layers.gpu-process.enabled": true,
   "fission.processSiteNames": true,
+  "layers.gpu-process-executable.enabled": false,
   "security.sandbox.content.level": 1,
   "security.sandbox.logging.enabled": true,
   "security.sandbox.content.mac.disconnect-windowserver": false
